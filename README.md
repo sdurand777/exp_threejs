@@ -9,3 +9,7 @@ npm run dev
 
 
 # exp_threejs
+
+
+# install modern gui
+npm install lil-gui 
