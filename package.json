@@ -9,7 +9,7 @@
     "serve": "node server.js",
     "start": "node server.js",
     "preview": "vite preview",
-    "deploy": "main -d ./dist"
+    "deploy": "gh-pages -d ./dist"
   },
   "keywords": [],
   "author": "",
