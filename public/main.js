@@ -157,8 +157,8 @@ plane.castShadow = true
 //plane.visible = false
 sceneA.add(plane)
 
-const ambientLightA = new THREE.AmbientLight(0xffffff, 0.9); // Lumière faible (intensité 0.2)
-sceneA.add(ambientLightA);
+// const ambientLightA = new THREE.AmbientLight(0xffffff, 0.9); // Lumière faible (intensité 0.2)
+// sceneA.add(ambientLightA);
 
 const gridHelper = new THREE.GridHelper()
 sceneA.add(gridHelper)
@@ -180,7 +180,7 @@ meshes[1].position.set(-1, 1, 0)
 meshes[2].position.set(1, 1, 0)
 meshes[3].position.set(3, 1, 0)
 
-meshes[3].scale.set(2,2,2)
+meshes[3].scale.set(1.2,1.2,1.2)
 
 meshes[0].castShadow = true
 meshes[1].castShadow = true
@@ -191,78 +191,79 @@ meshes.map((m) => (m.receiveShadow = true))
 
 sceneA.add(...meshes)
 
-// add light
-const lightA = new THREE.DirectionalLight(undefined, Math.PI)
-lightA.position.set(1, 1, 1)
-sceneA.add(lightA)
-
-// #region Spotlight
-
-const spotLight = new THREE.SpotLight(dataA.lightColor, Math.PI)
-spotLight.position.set(3, 2.5, 1)
-spotLight.visible = false
-//spotLight.target.position.set(5, 0, -5)
-spotLight.castShadow = true
-sceneA.add(spotLight)
-
-//const spotLightHelper = new THREE.SpotLightHelper(spotLight)
-const spotLightHelper = new THREE.CameraHelper(spotLight.shadow.camera)
-spotLightHelper.visible = false
-sceneA.add(spotLightHelper)
-
-const spotLightFolder = gui.addFolder('Spotlight')
-spotLightFolder.add(spotLight, 'visible')
-spotLightFolder.addColor(dataA, 'lightColor').onChange(() => {
-  spotLight.color.set(dataA.lightColor)
-})
-spotLightFolder.add(spotLight, 'intensity', 0, Math.PI * 10)
-spotLightFolder.add(spotLight.position, 'x', -10, 10).onChange(() => {
-  spotLight.shadow.camera.updateProjectionMatrix()
-  spotLightHelper.update()
-})
-spotLightFolder.add(spotLight.position, 'y', -10, 10).onChange(() => {
-  spotLight.shadow.camera.updateProjectionMatrix()
-  spotLightHelper.update()
-})
-spotLightFolder.add(spotLight.position, 'z', -10, 10).onChange(() => {
-  spotLight.shadow.camera.updateProjectionMatrix()
-  spotLightHelper.update()
-})
-spotLightFolder.add(spotLight, 'distance', 0.01, 100).onChange(() => {
-  spotLight.shadow.camera.updateProjectionMatrix()
-  spotLightHelper.update()
-})
-spotLightFolder.add(spotLight, 'decay', 0, 10).onChange(() => {
-  spotLight.shadow.camera.updateProjectionMatrix()
-  spotLightHelper.update()
-})
-spotLightFolder.add(spotLight, 'angle', 0, 1).onChange(() => {
-  spotLight.shadow.camera.updateProjectionMatrix()
-  spotLightHelper.update()
-})
-spotLightFolder.add(spotLight, 'penumbra', 0, 1, 0.001).onChange(() => {
-  spotLight.shadow.camera.updateProjectionMatrix()
-  spotLightHelper.update()
-})
-spotLightFolder.add(spotLightHelper, 'visible').name('Helper Visible')
-spotLightFolder.add(spotLight.shadow.camera, 'near', 0.01, 100).onChange(() => {
-  spotLight.shadow.camera.updateProjectionMatrix()
-  spotLightHelper.update()
-})
-spotLightFolder.add(dataA, 'shadowMapSizeWidth', [256, 512, 1024, 2048, 4096]).onChange(() => updateSpotLightShadowMapSize())
-spotLightFolder.add(dataA, 'shadowMapSizeHeight', [256, 512, 1024, 2048, 4096]).onChange(() => updateSpotLightShadowMapSize())
-spotLightFolder.add(spotLight.shadow, 'radius', 1, 10, 1).name('radius (PCF | VSM)') // PCFShadowMap or VSMShadowMap
-spotLightFolder.add(spotLight.shadow, 'blurSamples', 1, 20, 1).name('blurSamples (VSM)') // VSMShadowMap only
-spotLightFolder.close()
-
-function updateSpotLightShadowMapSize() {
-  spotLight.shadow.mapSize.width = dataA.shadowMapSizeWidth
-  spotLight.shadow.mapSize.height = dataA.shadowMapSizeHeight
-  spotLight.shadow.map = null
-}
+// // add light
+// const lightA = new THREE.DirectionalLight(undefined, Math.PI)
+// lightA.position.set(1, 1, 1)
+// sceneA.add(lightA)
 
 // #endregion
+// #region DirectionalLight
 
+const directionalLight = new THREE.DirectionalLight(dataA.lightColor, Math.PI)
+directionalLight.position.set(1, 1, 1)
+directionalLight.castShadow = true
+directionalLight.shadow.camera.near = 0
+directionalLight.shadow.camera.far = 10
+directionalLight.shadow.mapSize.width = dataA.shadowMapSizeWidth
+directionalLight.shadow.mapSize.height = dataA.shadowMapSizeHeight
+sceneA.add(directionalLight)
+
+// const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight)
+const directionalLightHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
+directionalLightHelper.visible = false
+sceneA.add(directionalLightHelper)
+
+const directionalLightFolder = gui.addFolder('DirectionalLight')
+directionalLightFolder.add(directionalLight, 'visible')
+directionalLightFolder.addColor(dataA, 'lightColor').onChange(() => {
+    directionalLight.color.set(dataA.lightColor)
+})
+directionalLightFolder.add(directionalLight, 'intensity', 0, Math.PI * 10)
+directionalLightFolder.add(directionalLight.position, 'x', -5, 5, 0.001).onChange(() => {
+    directionalLightHelper.update()
+})
+directionalLightFolder.add(directionalLight.position, 'y', -5, 5, 0.001).onChange(() => {
+    directionalLightHelper.update()
+})
+directionalLightFolder.add(directionalLight.position, 'z', -5, 5, 0.001).onChange(() => {
+    directionalLightHelper.update()
+})
+directionalLightFolder.add(directionalLightHelper, 'visible').name('Helper Visible')
+directionalLightFolder.add(directionalLight.shadow.camera, 'left', -10, -1, 0.1).onChange(() => {
+    directionalLight.shadow.camera.updateProjectionMatrix()
+    directionalLightHelper.update()
+})
+directionalLightFolder.add(directionalLight.shadow.camera, 'right', 1, 10, 0.1).onChange(() => {
+    directionalLight.shadow.camera.updateProjectionMatrix()
+    directionalLightHelper.update()
+})
+directionalLightFolder.add(directionalLight.shadow.camera, 'top', 1, 10, 0.1).onChange(() => {
+    directionalLight.shadow.camera.updateProjectionMatrix()
+    directionalLightHelper.update()
+})
+directionalLightFolder.add(directionalLight.shadow.camera, 'bottom', -10, -1, 0.1).onChange(() => {
+    directionalLight.shadow.camera.updateProjectionMatrix()
+    directionalLightHelper.update()
+})
+directionalLightFolder.add(directionalLight.shadow.camera, 'near', 0, 100).onChange(() => {
+    directionalLight.shadow.camera.updateProjectionMatrix()
+    directionalLightHelper.update()
+})
+directionalLightFolder.add(directionalLight.shadow.camera, 'far', 0.1, 100).onChange(() => {
+    directionalLight.shadow.camera.updateProjectionMatrix()
+    directionalLightHelper.update()
+})
+directionalLightFolder.add(dataA, 'shadowMapSizeWidth', [256, 512, 1024, 2048, 4096]).onChange(() => updateDirectionalLightShadowMapSize())
+directionalLightFolder.add(dataA, 'shadowMapSizeHeight', [256, 512, 1024, 2048, 4096]).onChange(() => updateDirectionalLightShadowMapSize())
+directionalLightFolder.add(directionalLight.shadow, 'radius', 1, 10, 1).name('radius (PCF | VSM)') // PCFShadowMap or VSMShadowMap
+directionalLightFolder.add(directionalLight.shadow, 'blurSamples', 1, 20, 1).name('blurSamples (VSM)') // VSMShadowMap only
+
+
+function updateDirectionalLightShadowMapSize() {
+    directionalLight.shadow.mapSize.width = dataA.shadowMapSizeWidth
+    directionalLight.shadow.mapSize.height = dataA.shadowMapSizeHeight
+    directionalLight.shadow.map = null
+}
 
 
 
@@ -354,7 +355,7 @@ gui.add(setScene, 'sceneB').name('Scene B')
 
 
 
-
+let angle = 0; // Angle initial
 // Animation pour le rendu
 function animate() {
     requestAnimationFrame(animate);
@@ -362,6 +363,20 @@ function animate() {
     // Rotation de la sphère pour l'animation
     sphere.rotation.x += 0.01;
     sphere.rotation.y += 0.01;
+
+    angle += 0.01; // Incrémenter l'angle pour la rotation
+
+    // Rayon de rotation
+    const radius = 1;
+
+    // Mettre à jour la position de la lumière
+    directionalLight.position.x = Math.cos(angle) * radius;
+    directionalLight.position.z = Math.sin(angle) * radius;
+
+    // Si nécessaire, orientez la lumière vers le centre
+    directionalLight.target.position.set(0, 0, 0);
+    directionalLight.target.updateMatrixWorld();
+
 
     renderer.render(activeScene, camera);
 
