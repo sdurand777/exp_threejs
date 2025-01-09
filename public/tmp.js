@@ -26,8 +26,6 @@ const gui = new GUI()
 // Création de la scène, de la caméra et du rendu
 const scene = new THREE.Scene();
 
-scene.background = new THREE.TextureLoader().load("ivm.png")
-
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 //const renderer = new THREE.WebGLRenderer();
@@ -56,69 +54,16 @@ const sphereGeometry = new THREE.SphereGeometry(radius, widthSegments, heightSeg
 // texture loader
 const textureLoader = new THREE.TextureLoader();
 
-const sphereTexture = textureLoader.load(
-      'img1.jpg',
-      (texture) => {
-        console.log("Texture chargée avec succès !");
-      },
-      undefined,
-      (error) => {
-        console.error("Erreur lors du chargement de la texture", error);
-      }
-    );
-
 // Créer un matériau utilisant la texture
 const sphereMaterial = new THREE.MeshStandardMaterial({
-    map: sphereTexture, // Couleur rouge
+    color: 0xaaaaaa, // Couleur rouge
 });
-
-
 
 // Création du maillage (Mesh)
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
 // Ajout de la sphère à la scène
 scene.add(sphere);
-
-
-// Charger le fichier PLY
-const loader = new PLYLoader();
-loader.load('ant.ply', function (geometry) {
-    // Appliquer les matériaux
-    geometry.computeVertexNormals(); // Calculer les normales si nécessaire
-
-    //const material = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
-
-    // texture loader
-    const textureLoader = new THREE.TextureLoader();
-
-    const antTexture = textureLoader.load(
-        'img1.jpg',
-        (texture) => {
-            console.log("Texture chargée avec succès !");
-        },
-        undefined,
-        (error) => {
-            console.error("Erreur lors du chargement de la texture", error);
-        }
-    );
-
-    // Créer un matériau utilisant la texture
-    const antmaterial = new THREE.MeshStandardMaterial({
-        map: antTexture, // Couleur rouge
-    });
-
-    const mesh = new THREE.Mesh(geometry, antmaterial);
-
-    // Ajuster la position de l'objet
-    mesh.position.set(-2, 0, 0); // Ajustez les valeurs x, y, z selon votre besoin
-    // Modifier l'échelle du mesh (ici un facteur d'échelle de 2 pour chaque axe)
-    mesh.scale.set(0.07, 0.07, 0.07); // x, y, z
-
-    // Ajouter le mesh à la scène
-    scene.add(mesh);
-});
-
 
 
 const sceneA = new THREE.Scene()
@@ -191,14 +136,6 @@ meshes.map((m) => (m.receiveShadow = true))
 
 sceneA.add(...meshes)
 
-// // add light
-// const lightA = new THREE.DirectionalLight(undefined, Math.PI)
-// lightA.position.set(1, 1, 1)
-// sceneA.add(lightA)
-
-// #endregion
-// #region DirectionalLight
-
 const directionalLight = new THREE.DirectionalLight(dataA.lightColor, Math.PI)
 directionalLight.position.set(1, 1, 1)
 directionalLight.castShadow = true
@@ -269,24 +206,9 @@ function updateDirectionalLightShadowMapSize() {
 
 
 
-
-// texture loader
-const textureLoaderCube = new THREE.TextureLoader();
-
-const cubeTexture = textureLoaderCube.load(
-      'img1.jpg',
-      (texture) => {
-        console.log("Texture chargée avec succès !");
-      },
-      undefined,
-      (error) => {
-        console.error("Erreur lors du chargement de la texture", error);
-      }
-    );
-
 // Créer un matériau utilisant la texture
 let material = new THREE.MeshBasicMaterial({
-  map: cubeTexture
+    color: 0x00ff00,
 });
 
 // material dont la couleur depend de la normal
