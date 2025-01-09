@@ -13,3 +13,14 @@ npm run dev
 
 # install modern gui
 npm install lil-gui 
+
+
+# pour le deploiement
+# build le dossier dist
+npm run build 
+# preview le rendering en local
+npm run preview
+# deploy en ligne
+npm run deploy
+
+# pour les textures ne pas oublier de copier les fichiers images et ply dans le dossier dist cree apres npm run build
