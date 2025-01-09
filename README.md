@@ -14,6 +14,8 @@ npm run dev
 # install modern gui
 npm install lil-gui 
 
+# add gh-pages for online
+npm install gh-pages --save-dev
 
 # pour le deploiement
 # build le dossier dist
