@@ -78,46 +78,66 @@ const sphereMaterial = new THREE.MeshStandardMaterial({
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
 // Ajout de la sphère à la scène
-scene.add(sphere);
+//scene.add(sphere);
 
-
-// Charger le fichier PLY
+// Load the PLY file
 const loader = new PLYLoader();
 loader.load('ant.ply', function (geometry) {
-    // Appliquer les matériaux
-    geometry.computeVertexNormals(); // Calculer les normales si nécessaire
+  // The PLYLoader will load vertex colors into the geometry's attributes
 
-    //const material = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
+  // Create a PointsMaterial with vertex colors
+  const material = new THREE.PointsMaterial({
+    size: 0.02, // Size of each point
+    vertexColors: true, // Use the colors from the vertices
+  });
 
-    // texture loader
-    const textureLoader = new THREE.TextureLoader();
+  // Create the Points object
+  const pointCloud = new THREE.Points(geometry, material);
+  scene.add(pointCloud);
 
-    const antTexture = textureLoader.load(
-        'img1.jpg',
-        (texture) => {
-            console.log("Texture chargée avec succès !");
-        },
-        undefined,
-        (error) => {
-            console.error("Erreur lors du chargement de la texture", error);
-        }
-    );
-
-    // Créer un matériau utilisant la texture
-    const antmaterial = new THREE.MeshStandardMaterial({
-        map: antTexture, // Couleur rouge
-    });
-
-    const mesh = new THREE.Mesh(geometry, antmaterial);
-
-    // Ajuster la position de l'objet
-    mesh.position.set(-2, 0, 0); // Ajustez les valeurs x, y, z selon votre besoin
-    // Modifier l'échelle du mesh (ici un facteur d'échelle de 2 pour chaque axe)
-    mesh.scale.set(0.07, 0.07, 0.07); // x, y, z
-
-    // Ajouter le mesh à la scène
-    scene.add(mesh);
 });
+
+// // Charger le fichier PLY
+// const loader = new PLYLoader();
+// loader.load('ant.ply', function (geometry) {
+//     // Appliquer les matériaux
+//     geometry.computeVertexNormals(); // Calculer les normales si nécessaire
+//
+//     //const material = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
+//
+//     // texture loader
+//     const textureLoader = new THREE.TextureLoader();
+//
+//     // Check if vertex colors exist and create a material
+//     const antmaterial = new THREE.MeshStandardMaterial({
+//         vertexColors: true, // Enables vertex colors
+//     });
+//     // const antTexture = textureLoader.load(
+//     //     'img1.jpg',
+//     //     (texture) => {
+//     //         console.log("Texture chargée avec succès !");
+//     //     },
+//     //     undefined,
+//     //     (error) => {
+//     //         console.error("Erreur lors du chargement de la texture", error);
+//     //     }
+//     // );
+//     //
+//     // // Créer un matériau utilisant la texture
+//     // const antmaterial = new THREE.MeshStandardMaterial({
+//     //     map: antTexture, // Couleur rouge
+//     // });
+//
+//     const mesh = new THREE.Mesh(geometry, antmaterial);
+//
+//     // // Ajuster la position de l'objet
+//     // mesh.position.set(-2, 0, 0); // Ajustez les valeurs x, y, z selon votre besoin
+//     // // Modifier l'échelle du mesh (ici un facteur d'échelle de 2 pour chaque axe)
+//     // mesh.scale.set(0.07, 0.07, 0.07); // x, y, z
+//
+//     // Ajouter le mesh à la scène
+//     scene.add(mesh);
+// });
 
 
 
@@ -315,7 +335,7 @@ var group = new THREE.Group();
 group.add(head);
 
 // add group to scene
-scene.add(group);
+//scene.add(group);
 
 
 // Ajout d'une lumière pour illuminer la sphère
